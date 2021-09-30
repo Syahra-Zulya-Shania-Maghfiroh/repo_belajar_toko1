@@ -7,6 +7,44 @@ use Illuminate\Support\Facades\Validator;
 
 class OrdersController extends Controller
 {
+    public function show()
+    {
+        $data_orders = Orders::join('petugas', 'petugas.id_petugas', 'orders.id_petugas')->get();
+        return Response()->json($data_orders);
+
+        
+    }
+    public function detail($id_petugas)
+    {
+        if(Orders::where('id_petugas', $id_petugas)->exists()) {
+        $data_orders = Orders::join('petugas', 'petugas.id_petugas', 'orders.id_petugas')
+        ->where('orders.id_petugas', '=', $id_petugas)
+        ->get();
+ 
+            return Response()->json($data_orders);
+    }
+        else {
+            return Response()->json(['message' => 'Tidak ditemukan' ]);
+        }
+    }
+    public function show2()
+    {
+        $data_orders = Orders::join('customers', 'customers.id_customers', 'orders.id_customers')->get();
+        return Response()->json($data_orders);
+    }
+    public function detail2($id_customers)
+    {
+        if(Orders::where('id_customers', $id_customers)->exists()) {
+        $data_orders = Orders::join('customers', 'customers.id_customers', 'orders.id_customers')
+        ->where('orders.id_customers', '=', $id_customers)
+        ->get();
+ 
+            return Response()->json($data_orders);
+    }
+        else {
+            return Response()->json(['message' => 'Tidak ditemukan' ]);
+        }
+    }
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),

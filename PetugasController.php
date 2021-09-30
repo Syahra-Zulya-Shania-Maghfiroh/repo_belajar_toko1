@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 class PetugasController extends Controller
 {
+    public function show()
+    {
+        return Petugas::all();
+    }
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),

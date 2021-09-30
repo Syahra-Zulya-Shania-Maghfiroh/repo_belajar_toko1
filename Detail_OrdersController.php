@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\DB;
 
 class Detail_OrdersController extends Controller
 {
+    public function show()
+    {
+        $data_detail_orders = Detail_Orders::join('orders', 'orders.id_orders', 'detail_orders.id_product')->get();
+        return Response()->json($data_detail_orders);
+
+        
+    }
+    public function detail($id_product)
+    {
+        if(Detail_Orders::where('id_product', $id_product)->exists()) {
+        $data_detail_orders = Detail_Orders::join('orders', 'orders.id_orders', 'detail_orders.id_orders')
+        ->where('detail_orders.id_orders', '=', $id_orders)
+        ->get();
+ 
+            return Response()->json($data_detail_orders);
+    }
+        else {
+            return Response()->json(['message' => 'Tidak ditemukan' ]);
+        }
+    }
+    
     public function store(Request $request)
     {
         $validator=Validator::make($request->all(),
