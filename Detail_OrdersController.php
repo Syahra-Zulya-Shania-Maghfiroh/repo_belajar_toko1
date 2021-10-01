@@ -61,4 +61,34 @@ class Detail_OrdersController extends Controller
             return Response()->json(['status' => 0]);
         }
     }
+    public function update($id_detail_orders, Request $request)
+{
+    $validator=Validator::make($request->all(),
+    [
+        'id_orders' => 'required',
+        'id_product' => 'required',
+        'qty' => 'required'
+    ]
+    );
+        if($validator->fails()) {
+            return Response()->json($validator->errors());
+        }
+        $id_product = $request->id_product;
+        $qty = $request->qty;
+        $harga = DB::table('product')->where('id_product', $id_product)->value('harga');
+        $subtotal = $harga * $qty;
+        
+        $ubah = Detail_Orders::where('id_detail_orders', $id_detail_orders)->update([
+            'id_orders' => $request->id_orders,
+            'id_product' => $request->id_product,
+            'qty' => $qty,
+            'subtotal'=>$subtotal
+        ]);
+        if($ubah) {
+            return Response()->json(['status' => 1]);
+        }
+        else {
+            return Response()->json(['status' => 0]);
+        }
+}
 }

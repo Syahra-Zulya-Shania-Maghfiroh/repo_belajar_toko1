@@ -70,4 +70,27 @@ class OrdersController extends Controller
             return Response()->json(['status' => 0]);
         }
     }
+    public function update($id_orders, Request $request)
+{
+    $validator=Validator::make($request->all(),
+    [
+        'id_customers' => 'required',
+        'id_petugas' => 'required'
+    ]
+    );
+        if($validator->fails()) {
+            return Response()->json($validator->errors());
+        }
+        $ubah = Orders::where('id_orders', $id_orders)->update([
+            'id_customers' => $request->id_customers,
+            'id_petugas' => $request->id_petugas,
+            'tgl_transaksi' => date("Y-m-d")
+        ]);
+        if($ubah) {
+            return Response()->json(['status' => 1]);
+        }
+        else {
+            return Response()->json(['status' => 0]);
+        }
+}
 }

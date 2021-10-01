@@ -40,4 +40,32 @@ class CustomersController extends Controller
             return Response()->json(['status'=>0]);
         }
     }
+    public function update($id_customers, Request $request)
+{
+    $validator=Validator::make($request->all(),
+    [
+        'nama' => 'required',
+        'alamat' => 'required',
+        'telp' => 'required',
+        'username' => 'required',
+        'password' => 'required'
+    ]
+    );
+        if($validator->fails()) {
+            return Response()->json($validator->errors());
+        }
+        $ubah = Customers::where('id_customers', $id_customers)->update([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'telp' => $request->telp,
+            'username' => $request->username,
+            'password' => $request->password
+        ]);
+        if($ubah) {
+            return Response()->json(['status' => 1]);
+        }
+        else {
+            return Response()->json(['status' => 0]);
+        }
+}
 }

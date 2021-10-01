@@ -39,4 +39,30 @@ class ProductController extends Controller
             return Response()->json(['status'=>0]);
         }
     }
+    public function update($id_product, Request $request)
+{
+    $validator=Validator::make($request->all(),
+    [
+        'nama_product' => 'required',
+        'deskripsi' => 'required',
+        'harga' => 'required',
+        'foto_product' => 'required'
+    ]
+    );
+        if($validator->fails()) {
+            return Response()->json($validator->errors());
+        }
+        $ubah = Product::where('id_product', $id_product)->update([
+            'nama_product' => $request->nama_product,
+            'deskripsi' => $request->deskripsi,
+            'harga' => $request->harga,
+            'foto_product' => $request->foto_product
+        ]);
+        if($ubah) {
+            return Response()->json(['status' => 1]);
+        }
+        else {
+            return Response()->json(['status' => 0]);
+        }
+}
 }

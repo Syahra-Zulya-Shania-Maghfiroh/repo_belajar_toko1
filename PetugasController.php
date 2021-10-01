@@ -38,4 +38,30 @@ class PetugasController extends Controller
             return Response()->json(['status'=>0]);
         }
     }
+    public function update($id_petugas, Request $request)
+{
+    $validator=Validator::make($request->all(),
+    [
+        'nama_petugas' => 'required',
+        'username' => 'required',
+        'password' => 'required',
+        'level' => 'required'
+    ]
+    );
+        if($validator->fails()) {
+            return Response()->json($validator->errors());
+        }
+        $ubah = Petugas::where('id_petugas', $id_petugas)->update([
+            'nama_petugas' => $request->nama_petugas,
+            'username' => $request->username,
+            'password' => $request->password,
+            'level' => $request->level
+        ]);
+        if($ubah) {
+            return Response()->json(['status' => 1]);
+        }
+        else {
+            return Response()->json(['status' => 0]);
+        }
+}
 }
